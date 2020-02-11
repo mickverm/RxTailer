@@ -35,7 +35,7 @@ publishing {
         mavenJava(MavenPublication) {
             groupId = 'be.mickverm.rxtailer3'
             artifactId = 'rxtailer'
-            version = '2.0.0-SNAPSHOT'
+            version = '3.0.0-SNAPSHOT'
 
             from components.java
 
