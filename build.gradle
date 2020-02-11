@@ -3,11 +3,6 @@ plugins {
     id 'maven-publish'
 }
 
-java {
-    withJavadocJar()
-    withSourcesJar()
-}
-
 repositories {
     mavenCentral()
 }
@@ -30,14 +25,23 @@ compileTestKotlin {
     kotlinOptions.jvmTarget = "1.8"
 }
 
+
+task sourcesJar(type: Jar, dependsOn: project.classes) {
+    from sourceSets.main.allSource
+}
+
 publishing {
     publications {
         mavenJava(MavenPublication) {
             groupId = 'be.mickverm.rxtailer3'
             artifactId = 'rxtailer'
-            version = '0.1.0-SNAPSHOT'
+            version = '2.0.0-SNAPSHOT'
 
             from components.java
+
+            artifact sourcesJar {
+                setArchiveClassifier('sources')
+            }
         }
     }
 }

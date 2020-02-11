@@ -1,4 +1,4 @@
-@file:JvmName("RxIndexedTailer")
+@file:JvmName("RxTailer")
 @file:JvmMultifileClass
 
 package be.mickverm.rxtailer3
@@ -17,25 +17,21 @@ import java.io.File
 import java.io.FileNotFoundException
 import java.util.concurrent.atomic.AtomicReference
 
-@JvmName("tail")
 @SchedulerSupport(SchedulerSupport.IO)
 fun File.tailIndexed(): Observable<Pair<Long, String>> {
     return tailIndexed(Schedulers.io())
 }
 
-@JvmName("tail")
 @SchedulerSupport(SchedulerSupport.CUSTOM)
 fun File.tailIndexed(scheduler: Scheduler): Observable<Pair<Long, String>> {
     return IndexedTailerObservable(this, scheduler)
 }
 
-@JvmName("tail")
 @SchedulerSupport(SchedulerSupport.IO)
 fun File.tailIndexed(limit: Int): Observable<List<Pair<Long, String>>> {
     return tailIndexed(limit, Schedulers.io())
 }
 
-@JvmName("tail")
 @SchedulerSupport(SchedulerSupport.CUSTOM)
 fun File.tailIndexed(limit: Int, scheduler: Scheduler): Observable<List<Pair<Long, String>>> {
     return tailIndexed(scheduler).scan(emptyList(), { list, line ->
@@ -46,13 +42,11 @@ fun File.tailIndexed(limit: Int, scheduler: Scheduler): Observable<List<Pair<Lon
     })
 }
 
-@JvmName("tail")
 @SchedulerSupport(SchedulerSupport.IO)
 fun <T : Any> File.tailIndexed(mapper: (index: Long, line: String) -> T): Observable<T> {
     return tailIndexed(Schedulers.io(), mapper)
 }
 
-@JvmName("tail")
 @SchedulerSupport(SchedulerSupport.CUSTOM)
 fun <T : Any> File.tailIndexed(scheduler: Scheduler, mapper: (index: Long, line: String) -> T): Observable<T> {
     return tailIndexed(scheduler).map { pair ->
@@ -60,13 +54,11 @@ fun <T : Any> File.tailIndexed(scheduler: Scheduler, mapper: (index: Long, line:
     }
 }
 
-@JvmName("tail")
 @SchedulerSupport(SchedulerSupport.IO)
 fun <T : Any> File.tailIndexed(limit: Int, mapper: (index: Long, line: String) -> T): Observable<List<T>> {
     return tailIndexed(limit, Schedulers.io(), mapper)
 }
 
-@JvmName("tail")
 @SchedulerSupport(SchedulerSupport.CUSTOM)
 fun <T : Any> File.tailIndexed(
     limit: Int,
