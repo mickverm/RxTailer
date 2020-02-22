@@ -3,7 +3,7 @@
 
 ## Download
 ```groovy
-TBD
+implementation 'be.mickverm.rxjava2:rxtailer:2.0.0'
 ```
 
 ## Usage
