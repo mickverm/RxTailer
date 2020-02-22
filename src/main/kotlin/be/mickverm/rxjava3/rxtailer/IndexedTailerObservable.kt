@@ -1,16 +1,16 @@
 @file:JvmName("RxTailer")
 @file:JvmMultifileClass
 
-package be.mickverm.rxjava2.rxtailer
+package be.mickverm.rxjava3.rxtailer
 
-import io.reactivex.Observable
-import io.reactivex.Observer
-import io.reactivex.Scheduler
-import io.reactivex.annotations.SchedulerSupport
-import io.reactivex.disposables.Disposable
-import io.reactivex.internal.disposables.DisposableHelper
-import io.reactivex.internal.schedulers.TrampolineScheduler
-import io.reactivex.schedulers.Schedulers
+import io.reactivex.rxjava3.annotations.SchedulerSupport
+import io.reactivex.rxjava3.core.Observable
+import io.reactivex.rxjava3.core.Observer
+import io.reactivex.rxjava3.core.Scheduler
+import io.reactivex.rxjava3.disposables.Disposable
+import io.reactivex.rxjava3.internal.disposables.DisposableHelper
+import io.reactivex.rxjava3.internal.schedulers.TrampolineScheduler
+import io.reactivex.rxjava3.schedulers.Schedulers
 import org.apache.commons.io.input.Tailer
 import org.apache.commons.io.input.TailerListener
 import java.io.File
@@ -83,7 +83,11 @@ private class IndexedTailerObservable(
 ) : Observable<Pair<Long, String>>() {
 
     override fun subscribeActual(observer: Observer<in Pair<Long, String>>) {
-        val tailerObserver = IndexedTailerObserver(file, observer)
+        val tailerObserver =
+            IndexedTailerObserver(
+                file,
+                observer
+            )
         observer.onSubscribe(tailerObserver)
 
         if (scheduler is TrampolineScheduler) {

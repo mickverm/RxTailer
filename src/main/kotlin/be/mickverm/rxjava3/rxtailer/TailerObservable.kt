@@ -1,7 +1,7 @@
 @file:JvmName("RxTailer")
 @file:JvmMultifileClass
 
-package be.mickverm.rxtailer3
+package be.mickverm.rxjava3.rxtailer
 
 import io.reactivex.rxjava3.annotations.SchedulerSupport
 import io.reactivex.rxjava3.core.Observable
@@ -79,7 +79,8 @@ private class TailerObservable(
 ) : Observable<String>() {
 
     override fun subscribeActual(observer: Observer<in String>) {
-        val tailerObserver = TailerObserver(file, observer)
+        val tailerObserver =
+            TailerObserver(file, observer)
         observer.onSubscribe(tailerObserver)
 
         if (scheduler is TrampolineScheduler) {
