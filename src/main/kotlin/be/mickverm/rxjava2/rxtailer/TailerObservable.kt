@@ -1,7 +1,7 @@
 @file:JvmName("RxTailer")
 @file:JvmMultifileClass
 
-package be.mickverm.rxtailer2
+package be.mickverm.rxjava2.rxtailer
 
 import io.reactivex.Observable
 import io.reactivex.Observer
@@ -18,23 +18,23 @@ import java.io.FileNotFoundException
 import java.util.concurrent.atomic.AtomicReference
 
 @SchedulerSupport(SchedulerSupport.IO)
-fun File.tailIndexed(): Observable<Pair<Long, String>> {
-    return tailIndexed(Schedulers.io())
+fun File.tail(): Observable<String> {
+    return tail(Schedulers.io())
 }
 
 @SchedulerSupport(SchedulerSupport.CUSTOM)
-fun File.tailIndexed(scheduler: Scheduler): Observable<Pair<Long, String>> {
-    return IndexedTailerObservable(this, scheduler)
+fun File.tail(scheduler: Scheduler): Observable<String> {
+    return TailerObservable(this, scheduler)
 }
 
 @SchedulerSupport(SchedulerSupport.IO)
-fun File.tailIndexed(limit: Int): Observable<List<Pair<Long, String>>> {
-    return tailIndexed(limit, Schedulers.io())
+fun File.tail(limit: Int): Observable<List<String>> {
+    return tail(limit, Schedulers.io())
 }
 
 @SchedulerSupport(SchedulerSupport.CUSTOM)
-fun File.tailIndexed(limit: Int, scheduler: Scheduler): Observable<List<Pair<Long, String>>> {
-    return tailIndexed(scheduler).scan(emptyList(), { list, line ->
+fun File.tail(limit: Int, scheduler: Scheduler): Observable<List<String>> {
+    return tail(scheduler).scan(emptyList(), { list, line ->
         list.toMutableList().apply {
             add(line)
             takeLast(limit)
@@ -43,29 +43,25 @@ fun File.tailIndexed(limit: Int, scheduler: Scheduler): Observable<List<Pair<Lon
 }
 
 @SchedulerSupport(SchedulerSupport.IO)
-fun <T : Any> File.tailIndexed(mapper: (index: Long, line: String) -> T): Observable<T> {
-    return tailIndexed(Schedulers.io(), mapper)
+fun <T : Any> File.tail(mapper: (line: String) -> T): Observable<T> {
+    return tail(Schedulers.io(), mapper)
 }
 
 @SchedulerSupport(SchedulerSupport.CUSTOM)
-fun <T : Any> File.tailIndexed(scheduler: Scheduler, mapper: (index: Long, line: String) -> T): Observable<T> {
-    return tailIndexed(scheduler).map { pair ->
-        mapper.invoke(pair.first, pair.second)
+fun <T : Any> File.tail(scheduler: Scheduler, mapper: (line: String) -> T): Observable<T> {
+    return tail(scheduler).map { line ->
+        mapper.invoke(line)
     }
 }
 
 @SchedulerSupport(SchedulerSupport.IO)
-fun <T : Any> File.tailIndexed(limit: Int, mapper: (index: Long, line: String) -> T): Observable<List<T>> {
-    return tailIndexed(limit, Schedulers.io(), mapper)
+fun <T : Any> File.tail(limit: Int, mapper: (line: String) -> T): Observable<List<T>> {
+    return tail(limit, Schedulers.io(), mapper)
 }
 
 @SchedulerSupport(SchedulerSupport.CUSTOM)
-fun <T : Any> File.tailIndexed(
-    limit: Int,
-    scheduler: Scheduler,
-    mapper: (index: Long, line: String) -> T
-): Observable<List<T>> {
-    return tailIndexed(scheduler, mapper).scan(emptyList(), { list, line ->
+fun <T : Any> File.tail(limit: Int, scheduler: Scheduler, mapper: (line: String) -> T): Observable<List<T>> {
+    return tail(scheduler, mapper).scan(emptyList(), { list, line ->
         list.toMutableList().apply {
             add(line)
             takeLast(limit)
@@ -77,13 +73,13 @@ fun <T : Any> File.tailIndexed(
  * @param file the file to follow.
  * @param scheduler the Scheduler on which the waiting happens and items are emitted
  */
-private class IndexedTailerObservable(
+private class TailerObservable(
     private val file: File,
     private val scheduler: Scheduler
-) : Observable<Pair<Long, String>>() {
+) : Observable<String>() {
 
-    override fun subscribeActual(observer: Observer<in Pair<Long, String>>) {
-        val tailerObserver = IndexedTailerObserver(file, observer)
+    override fun subscribeActual(observer: Observer<in String>) {
+        val tailerObserver = TailerObserver(file, observer)
         observer.onSubscribe(tailerObserver)
 
         if (scheduler is TrampolineScheduler) {
@@ -96,14 +92,12 @@ private class IndexedTailerObservable(
         }
     }
 
-    private class IndexedTailerObserver(
+    private class TailerObserver(
         private val file: File,
-        private val downstream: Observer<in Pair<Long, String>>
+        private val downstream: Observer<in String>
     ) : AtomicReference<Disposable>(), TailerListener, Disposable {
 
         val tailer = Tailer(file, this)
-
-        private var index = 0L
 
         override fun dispose() {
             DisposableHelper.dispose(this)
@@ -129,7 +123,7 @@ private class IndexedTailerObservable(
 
         override fun handle(line: String) {
             if (get() != DisposableHelper.DISPOSED) {
-                downstream.onNext(Pair(index++, line))
+                downstream.onNext(line)
             }
         }
 

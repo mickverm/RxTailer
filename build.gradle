@@ -33,7 +33,7 @@ task sourcesJar(type: Jar, dependsOn: project.classes) {
 publishing {
     publications {
         mavenJava(MavenPublication) {
-            groupId = 'be.mickverm.rxtailer2'
+            groupId = 'be.mickverm.rxjava2'
             artifactId = 'rxtailer'
             version = '2.0.0-SNAPSHOT'
 
