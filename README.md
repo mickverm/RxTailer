@@ -1,4 +1,6 @@
 # RxTailer
+[ ![Download](https://api.bintray.com/packages/mickverm/maven/RxTailer2/images/download.svg) ](https://bintray.com/mickverm/maven/RxTailer2/_latestVersion)
+
 [RxJava2][0] file tailing API's for the [commons-io Tailer][1]
 
 ## Download
