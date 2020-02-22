@@ -24,10 +24,10 @@ bintray {
         licenses = ['Apache-2.0']
 
         version {
-            name = '2.0.0'
-            desc = 'RxTailer 2.0.0'
+            name = '3.0.0'
+            desc = 'RxTailer 3.0.0'
             released = new Date()
-            vcsTag = '2.0.0'
+            vcsTag = '3.0.0'
         }
     }
 }
@@ -43,9 +43,9 @@ publishing {
             from components.java
             artifact sourcesJar
 
-            groupId 'be.mickverm.rxjava2'
+            groupId 'be.mickverm.rxjava3'
             artifactId 'rxtailer'
-            version '2.0.0'
+            version '3.0.0'
 
             pom {
                 name = 'RxTailer'
