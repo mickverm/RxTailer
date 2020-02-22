@@ -1,0 +1,76 @@
+apply plugin: 'com.jfrog.bintray'
+apply plugin: 'maven-publish'
+
+def getRepositoryUsername() {
+    return hasProperty('BINTRAY_USERNAME') ? BINTRAY_USERNAME : ''
+}
+
+def getRepositoryApiKey() {
+    return hasProperty('BINTRAY_API_KEY') ? BINTRAY_API_KEY : ''
+}
+
+bintray {
+    user = getRepositoryUsername()
+    key = getRepositoryApiKey()
+    publications = ['mavenJava']
+
+    pkg {
+        repo = 'maven'
+        name = 'RxTailer'
+        desc = 'RxJava file tailing API\'s for the commons-io Tailer.'
+        websiteUrl = 'https://github.com/mickverm/RxTailer'
+        issueTrackerUrl = 'https://github.com/mickverm/RxTailer/issues'
+        vcsUrl = 'https://github.com/mickverm/RxTailer.git'
+        licenses = ['Apache-2.0']
+
+        version {
+            name = '2.0.0'
+            desc = 'RxTailer 2.0.0'
+            released = new Date()
+            vcsTag = '2.0.0'
+        }
+    }
+}
+
+task sourcesJar(type: Jar) {
+    setArchiveClassifier('sources')
+    from sourceSets.main.allSource
+}
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            from components.java
+            artifact sourcesJar
+
+            groupId 'be.mickverm.rxjava2'
+            artifactId 'rxtailer'
+            version '2.0.0'
+
+            pom {
+                name = 'RxTailer'
+                description = 'RxJava file tailing API\'s for the commons-io Tailer.'
+                url = 'https://github.com/mickverm/RxTailer'
+
+                licenses {
+                    license {
+                        name = 'The Apache License, Version 2.0'
+                        url = 'https://www.apache.org/licenses/LICENSE-2.0.txt'
+                    }
+                }
+
+                developers {
+                    developer {
+                        id = 'mickverm'
+                        name = 'Michiel Vermeersch'
+                    }
+                }
+
+                scm {
+                    url = 'https://github.com/mickverm/RxTailer'
+                }
+            }
+        }
+    }
+}
+
