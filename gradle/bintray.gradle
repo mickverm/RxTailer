@@ -16,8 +16,8 @@ bintray {
 
     pkg {
         repo = 'maven'
-        name = 'RxTailer2'
-        desc = 'RxJava2 file tailing API\'s for the commons-io Tailer.'
+        name = 'RxTailer'
+        desc = 'RxJava file tailing API\'s for the commons-io Tailer.'
         websiteUrl = 'https://github.com/mickverm/RxTailer'
         issueTrackerUrl = 'https://github.com/mickverm/RxTailer/issues'
         vcsUrl = 'https://github.com/mickverm/RxTailer.git'
@@ -49,7 +49,7 @@ publishing {
 
             pom {
                 name = 'RxTailer'
-                description = 'RxJava2 file tailing API\'s for the commons-io Tailer.'
+                description = 'RxJava file tailing API\'s for the commons-io Tailer.'
                 url = 'https://github.com/mickverm/RxTailer'
 
                 licenses {
