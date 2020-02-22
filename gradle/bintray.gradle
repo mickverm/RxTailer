@@ -16,7 +16,7 @@ bintray {
 
     pkg {
         repo = 'maven'
-        name = 'RxTailer'
+        name = 'RxTailer3'
         desc = 'RxJava file tailing API\'s for the commons-io Tailer.'
         websiteUrl = 'https://github.com/mickverm/RxTailer'
         issueTrackerUrl = 'https://github.com/mickverm/RxTailer/issues'

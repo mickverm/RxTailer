@@ -1,9 +1,11 @@
 # RxTailer
-[RxJava2][0] file tailing API's for the [commons-io Tailer][1]
+[ ![Download](https://api.bintray.com/packages/mickverm/maven/RxTailer3/images/download.svg) ](https://bintray.com/mickverm/maven/RxTailer3/_latestVersion)
+
+[RxJava3][0] file tailing API's for the [commons-io Tailer][1]
 
 ## Download
 ```groovy
-TBD
+implementation 'be.mickverm.rxjava3:rxtailer:3.0.0'
 ```
 
 ## Usage
@@ -80,5 +82,5 @@ In Kotlin, these methods are implemented using extension functions, so just call
     See the License for the specific language governing permissions and
     limitations under the License.
   
-  [0]: https://github.com/ReactiveX/RxJava/tree/2.x
+  [0]: https://github.com/ReactiveX/RxJava/tree/3.x
   [1]: https://github.com/apache/commons-io/blob/master/src/main/java/org/apache/commons/io/input/Tailer.java
