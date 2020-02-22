@@ -9,7 +9,7 @@ implementation 'be.mickverm.rxjava2:rxtailer:2.0.0'
 ```
 
 ## Usage
-In Kotlin, these methods are implemented using extension functions, so just call .tail() and .tailIndexed() on your file.
+In Kotlin, these methods are implemented using extension functions, so just call `.tail()` and `.tailIndexed()` on your file.
 
 ### Tail a file
 ```java
