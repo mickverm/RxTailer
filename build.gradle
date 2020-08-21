@@ -10,7 +10,7 @@ repositories {
 dependencies {
     api "org.jetbrains.kotlin:kotlin-stdlib"
 
-    api "io.reactivex.rxjava3:rxjava:3.0.4"
+    api "io.reactivex.rxjava3:rxjava:3.0.6"
     implementation "commons-io:commons-io:2.7"
 }
 
