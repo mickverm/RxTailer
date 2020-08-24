@@ -17,6 +17,8 @@ import java.io.File
 import java.io.FileNotFoundException
 import java.util.concurrent.atomic.AtomicReference
 
+private typealias IndexedMapper<T> = (index: Long, line: String) -> T
+
 @SchedulerSupport(SchedulerSupport.IO)
 fun File.tailIndexed(): Observable<Pair<Long, String>> {
     return tailIndexed(Schedulers.io())
@@ -42,28 +44,24 @@ fun File.tailIndexed(limit: Int, scheduler: Scheduler): Observable<List<Pair<Lon
 }
 
 @SchedulerSupport(SchedulerSupport.IO)
-fun <T : Any> File.tailIndexed(mapper: (index: Long, line: String) -> T): Observable<T> {
+fun <T : Any> File.tailIndexed(mapper: IndexedMapper<T>): Observable<T> {
     return tailIndexed(Schedulers.io(), mapper)
 }
 
 @SchedulerSupport(SchedulerSupport.CUSTOM)
-fun <T : Any> File.tailIndexed(scheduler: Scheduler, mapper: (index: Long, line: String) -> T): Observable<T> {
+fun <T : Any> File.tailIndexed(scheduler: Scheduler, mapper: IndexedMapper<T>): Observable<T> {
     return tailIndexed(scheduler).map { pair ->
-        mapper.invoke(pair.first, pair.second)
+        mapper(pair.first, pair.second)
     }
 }
 
 @SchedulerSupport(SchedulerSupport.IO)
-fun <T : Any> File.tailIndexed(limit: Int, mapper: (index: Long, line: String) -> T): Observable<List<T>> {
+fun <T : Any> File.tailIndexed(limit: Int, mapper: IndexedMapper<T>): Observable<List<T>> {
     return tailIndexed(limit, Schedulers.io(), mapper)
 }
 
 @SchedulerSupport(SchedulerSupport.CUSTOM)
-fun <T : Any> File.tailIndexed(
-    limit: Int,
-    scheduler: Scheduler,
-    mapper: (index: Long, line: String) -> T
-): Observable<List<T>> {
+fun <T : Any> File.tailIndexed(limit: Int, scheduler: Scheduler, mapper: IndexedMapper<T>): Observable<List<T>> {
     return tailIndexed(scheduler, mapper).scan(emptyList(), { list, line ->
         list.toMutableList().apply {
             add(line)
