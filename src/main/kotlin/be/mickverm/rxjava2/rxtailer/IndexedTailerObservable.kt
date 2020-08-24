@@ -36,11 +36,11 @@ fun File.tailIndexed(limit: Int): Observable<List<Pair<Long, String>>> {
 
 @SchedulerSupport(SchedulerSupport.CUSTOM)
 fun File.tailIndexed(limit: Int, scheduler: Scheduler): Observable<List<Pair<Long, String>>> {
-    return tailIndexed(scheduler).scan(emptyList(), { list, line ->
+    return tailIndexed(scheduler).scan(emptyList<Pair<Long, String>>()) { list, line ->
         list.toMutableList().apply {
             add(line)
         }.takeLast(limit)
-    })
+    }.skip(1)
 }
 
 @SchedulerSupport(SchedulerSupport.IO)
@@ -62,11 +62,11 @@ fun <T : Any> File.tailIndexed(limit: Int, mapper: IndexedMapper<T>): Observable
 
 @SchedulerSupport(SchedulerSupport.CUSTOM)
 fun <T : Any> File.tailIndexed(limit: Int, scheduler: Scheduler, mapper: IndexedMapper<T>): Observable<List<T>> {
-    return tailIndexed(scheduler, mapper).scan(emptyList(), { list, line ->
+    return tailIndexed(scheduler, mapper).scan(emptyList<T>()) { list, line ->
         list.toMutableList().apply {
             add(line)
         }.takeLast(limit)
-    })
+    }.skip(1)
 }
 
 /**

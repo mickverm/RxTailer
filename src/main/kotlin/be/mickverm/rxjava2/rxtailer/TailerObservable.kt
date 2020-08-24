@@ -36,11 +36,11 @@ fun File.tail(limit: Int): Observable<List<String>> {
 
 @SchedulerSupport(SchedulerSupport.CUSTOM)
 fun File.tail(limit: Int, scheduler: Scheduler): Observable<List<String>> {
-    return tail(scheduler).scan(emptyList(), { list, line ->
+    return tail(scheduler).scan(emptyList<String>()) { list, line ->
         list.toMutableList().apply {
             add(line)
         }.takeLast(limit)
-    })
+    }.skip(1)
 }
 
 @SchedulerSupport(SchedulerSupport.IO)
@@ -60,11 +60,11 @@ fun <T : Any> File.tail(limit: Int, mapper: Mapper<T>): Observable<List<T>> {
 
 @SchedulerSupport(SchedulerSupport.CUSTOM)
 fun <T : Any> File.tail(limit: Int, scheduler: Scheduler, mapper: Mapper<T>): Observable<List<T>> {
-    return tail(scheduler, mapper).scan(emptyList(), { list, line ->
+    return tail(scheduler, mapper).scan(emptyList<T>()) { list, line ->
         list.toMutableList().apply {
             add(line)
         }.takeLast(limit)
-    })
+    }.skip(1)
 }
 
 /**
