@@ -37,8 +37,7 @@ fun File.tailIndexed(limit: Int, scheduler: Scheduler): Observable<List<Pair<Lon
     return tailIndexed(scheduler).scan(emptyList(), { list, line ->
         list.toMutableList().apply {
             add(line)
-            takeLast(limit)
-        }
+        }.takeLast(limit)
     })
 }
 
@@ -68,8 +67,7 @@ fun <T : Any> File.tailIndexed(
     return tailIndexed(scheduler, mapper).scan(emptyList(), { list, line ->
         list.toMutableList().apply {
             add(line)
-            takeLast(limit)
-        }
+        }.takeLast(limit)
     })
 }
 
