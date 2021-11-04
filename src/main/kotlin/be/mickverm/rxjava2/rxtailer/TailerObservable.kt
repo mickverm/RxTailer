@@ -98,6 +98,7 @@ private class TailerObservable(
         val tailer = Tailer(file, this)
 
         override fun dispose() {
+            tailer.stop()
             DisposableHelper.dispose(this)
         }
 
